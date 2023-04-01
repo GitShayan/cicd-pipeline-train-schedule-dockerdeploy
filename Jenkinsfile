@@ -8,6 +8,7 @@ pipeline {
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
         }
+// the app.inside run the command inside the image to make sure that the image is healthy
         stage('Build Docker Image') {
             when {
                 branch 'master'
@@ -21,6 +22,7 @@ pipeline {
                 }
             }
         }
+//we have to setup docker_hub_login credentials in jenkins then we add two tag the current build tag and latest tag to current image   
         stage('Push Docker Image') {
             when {
                 branch 'master'
@@ -34,6 +36,8 @@ pipeline {
                 }
             }
         }
+//we use "try" syntax to avoid failing the deployment If one of the two commands we executed fail after execution
+//we have to setup "prod_ip" variable in general configuration > environment variables 
         stage('DeployToProduction') {
             when {
                 branch 'master'
